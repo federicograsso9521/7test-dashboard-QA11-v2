@@ -354,6 +354,11 @@ async function loadAll() {
     const runByTC = {};
     runData.forEach(r => { runByTC[r['TC']] = r; });
     const runTCs = new Set(Object.keys(runByTC));
+    // TCs actually executed (status Pass/Fail), excluding "Not Run" placeholders
+    const executedTCs = new Set(Object.keys(runByTC).filter(tc => {
+      const st = runByTC[tc]['STATUS'];
+      return st && st !== 'Not Run';
+    }));
     const allRunIds = new Set(runData.map(r => r['RUN-ID']).filter(Boolean));
     const currentRun = latestRunId(allRunIds) || 'RUN-01';
 
@@ -377,7 +382,7 @@ async function loadAll() {
     const totalBugs = bugsData.length;
     const bugsAbiertos = bugsData.filter(b => (b['STATUS'] || '').toLowerCase() === 'abierto').length;
     const bugsCerrados = bugsData.filter(b => (b['STATUS'] || '').toLowerCase() === 'cerrado').length;
-    const coveragePct = Math.round((runTCs.size / totalCasos) * 100);
+    const coveragePct = Math.round((executedTCs.size / totalCasos) * 100);
 
     // Priority counts (full TC catalog)
     const prioCounts = { Alta: 0, Media: 0, Baja: 0 };
@@ -388,7 +393,7 @@ async function loadAll() {
 
     // Priority counts of TCs that have been run at least once
     const runPrioCounts = { Alta: 0, Media: 0, Baja: 0 };
-    runTCs.forEach(tcId => {
+    executedTCs.forEach(tcId => {
       const tc = casesData.find(c => c['TC'] === tcId);
       const p = tc ? tc['PRIORIDAD'] : runByTC[tcId]['PRIORIDAD'];
       if (runPrioCounts[p] !== undefined) runPrioCounts[p]++;
@@ -442,7 +447,7 @@ async function loadAll() {
         <div class="kpi-label">En ejecución</div>
         <div class="kpi-value" style="color:var(--blue)">${runTCs.size}</div>
         <div class="kpi-sub">de ${totalCasos} casos</div>
-        <div class="kpi-accent-bar" style="width:${coveragePct}%;background:var(--blue)"></div>
+        <div class="kpi-accent-bar" style="width:${Math.round(runTCs.size/totalCasos*100)}%;background:var(--blue)"></div>
       </div>
       <div class="kpi-card">
         <div class="kpi-label">Ejecutados</div>
@@ -459,7 +464,7 @@ async function loadAll() {
       <div class="kpi-card">
         <div class="kpi-label">Coverage</div>
         <div class="kpi-value" style="color:var(--amber)">${coveragePct}%</div>
-        <div class="kpi-sub">${runTCs.size} / ${totalCasos} en run</div>
+        <div class="kpi-sub">${executedTCs.size} / ${totalCasos} ejecutados</div>
         <div class="kpi-accent-bar" style="width:${coveragePct}%;background:var(--amber)"></div>
       </div>
       <div class="kpi-card">
