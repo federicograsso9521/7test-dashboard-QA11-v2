@@ -237,11 +237,11 @@
 </footer>
 
 <script>
-const PUB_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRFh_Gp1ISDTllnmmN5yk58bD-6oRI-7A-MX-6HMtya7S6KYjHSwAMG_7wcA4CUUzknDjLO-NUlKsKg/pub';
+const SHEET_ID = '19dycxXJ7-rV14_iZvQRr_qpFmGdR61yYKCUR0VyhUaM';
 const GIDS = { cases: 2084411916, run: 788558022, bugs: 675323042 };
 
 function csvUrl(gid) {
-  return `${PUB_BASE}?output=csv&gid=${gid}`;
+  return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&gid=${gid}`;
 }
 
 function parseCSV(url) {
