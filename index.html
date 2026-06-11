@@ -327,13 +327,22 @@ async function loadAll() {
       casesHeaders = casesRaw[1].map(h => (h || '').trim());
       for (let i = 2; i < casesRaw.length; i++) {
         const row = casesRaw[i];
-        if (!row[0] || !row[0].startsWith('TC-')) continue;
-        const obj = {};
-        casesHeaders.forEach((h, idx) => obj[h] = (row[idx] || '').trim());
+        const tcId = (row[0] || '').toString().trim();
+        if (!/^TC-\d+$/.test(tcId)) continue;
+        const obj = { 'TC': tcId };
+        casesHeaders.forEach((h, idx) => { if (h && h !== 'TC') obj[h] = (row[idx] !== undefined && row[idx] !== null) ? String(row[idx]).trim() : ''; });
         casesData.push(obj);
       }
     }
     const casesTitle = (casesRaw[0] && casesRaw[0][0]) ? casesRaw[0][0] : '';
+    // Deduplicate by TC id, keep last occurrence
+    const casesByTC = {};
+    casesData.forEach(tc => { casesByTC[tc['TC']] = tc; });
+    casesData = Object.values(casesByTC).sort((a,b) => {
+      const na = parseInt((a['TC'].match(/\d+/)||['0'])[0]);
+      const nb = parseInt((b['TC'].match(/\d+/)||['0'])[0]);
+      return na - nb;
+    });
 
     // --- PARSE RUN ---
     // row 1 headers: RUN-ID, TC, NOMBRE, STATUS, RESULTADO OBTENIDO, PRIORIDAD, CRITICIDAD, Fecha del RUN, TESTER, Release
@@ -343,9 +352,11 @@ async function loadAll() {
       runHeaders = runRaw[1].map(h => (h || '').trim());
       for (let i = 2; i < runRaw.length; i++) {
         const row = runRaw[i];
-        if (!row[1] || !row[1].startsWith('TC-')) continue;
+        const tcId = (row[1] || '').toString().trim();
+        if (!/^TC-\d+$/.test(tcId)) continue;
         const obj = {};
         runHeaders.forEach((h, idx) => obj[h] = (row[idx] !== undefined && row[idx] !== null) ? String(row[idx]).trim() : '');
+        obj['TC'] = tcId;
         runData.push(obj);
       }
     }
@@ -370,9 +381,11 @@ async function loadAll() {
       bugsHeaders = bugsRaw[1].map(h => (h || '').trim());
       for (let i = 2; i < bugsRaw.length; i++) {
         const row = bugsRaw[i];
-        if (!row[0] || !row[0].startsWith('BUG-')) continue;
+        const bugId = (row[0] || '').toString().trim();
+        if (!/^BUG-\d+$/.test(bugId)) continue;
         const obj = {};
         bugsHeaders.forEach((h, idx) => obj[h] = (row[idx] !== undefined && row[idx] !== null) ? String(row[idx]).trim() : '');
+        obj['BUG-ID'] = bugId;
         bugsData.push(obj);
       }
     }
