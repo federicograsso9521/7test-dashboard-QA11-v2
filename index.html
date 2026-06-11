@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>7test – Dashboard QA · RUN-01</title>
+<title>7test – Dashboard QA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -94,11 +94,11 @@
   .bugs-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px; }
   .count-badge { background: var(--red-bg); color: var(--red); font-family: 'DM Mono', monospace; font-size: 11px; padding: 3px 10px; border-radius: 20px; }
   table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  th { background: var(--surface2); color: var(--text3); font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; padding: 10px 16px; text-align: left; font-weight: 500; border-bottom: 1px solid var(--border); }
+  th { background: var(--surface2); color: var(--text3); font-family: 'DM Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; padding: 10px 16px; text-align: left; font-weight: 500; border-bottom: 1px solid var(--border); white-space: nowrap; }
   td { padding: 11px 16px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: var(--surface2); }
-  .bug-id { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text); font-weight: 500; }
+  .bug-id { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text); font-weight: 500; white-space: nowrap; }
   .bug-desc { color: var(--text); max-width: 260px; }
 
   .badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 10px; font-family: 'DM Mono', monospace; font-weight: 500; white-space: nowrap; }
@@ -106,12 +106,13 @@
   .badge-media { background: var(--amber-bg); color: var(--amber); }
   .badge-baja { background: var(--green-bg); color: var(--green); }
   .badge-abierto { background: var(--amber-bg); color: var(--amber); }
+  .badge-cerrado { background: var(--green-bg); color: var(--green); }
 
-  .tc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; margin-bottom: 2.5rem; }
+  .tc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-bottom: 2.5rem; }
   .tc-item { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
   .tc-item.no-run { opacity: 0.45; }
   .tc-code { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text3); margin-bottom: 4px; }
-  .tc-name { font-size: 11px; color: var(--text); line-height: 1.3; margin-bottom: 6px; }
+  .tc-name { font-size: 11px; color: var(--text); line-height: 1.3; margin-bottom: 6px; min-height: 28px; }
   .tc-footer { display: flex; align-items: center; justify-content: space-between; }
   .status-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
   .status-pending { background: #a09e97; }
@@ -185,7 +186,7 @@
 
   <div class="two-col">
     <div class="chart-card">
-      <div class="chart-title">Coverage por prioridad · RUN-01</div>
+      <div class="chart-title" id="coverageTitle">Coverage por prioridad</div>
       <div id="coverageBars"></div>
       <div style="margin-top:1.5rem; border-top:1px solid var(--border); padding-top:1rem;">
         <div class="chart-title" style="margin-bottom:0.75rem;">TCs por prioridad (total)</div>
@@ -219,7 +220,7 @@
       <span class="count-badge" id="bugsCount">…</span>
     </div>
     <div style="overflow-x:auto;"><table><thead><tr>
-      <th>ID</th><th>TC</th><th>Descripción</th><th>Ambiente</th><th>Prioridad</th><th>Criticidad</th><th>Tester</th><th>Estado</th>
+      <th>ID</th><th>Run</th><th>TC</th><th>Descripción</th><th>Ambiente</th><th>Prioridad</th><th>Criticidad</th><th>Tester</th><th>Release</th><th>Estado</th>
     </tr></thead><tbody id="bugsTableBody"></tbody></table></div>
   </div>
 
@@ -232,12 +233,12 @@
 
 <footer class="footer">
   <span>7test · Testing de Aplicaciones · Facultad</span>
-  <span id="footerRight">RUN-01 · Release 1.1</span>
+  <span id="footerRight">…</span>
 </footer>
 
 <script>
-const PUB_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRHJiu-hItd9SGBaEyeeXi3jrqd1tq2SG7mogib7y7gG7Y_tiA-htuzNjTksHZCAw/pub';
-const GIDS = { summary: 277801922, cases: 619066367, run: 2085922375, bugs: 188373661 };
+const PUB_BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRFh_Gp1ISDTllnmmN5yk58bD-6oRI-7A-MX-6HMtya7S6KYjHSwAMG_7wcA4CUUzknDjLO-NUlKsKg/pub';
+const GIDS = { cases: 2084411916, run: 788558022, bugs: 675323042 };
 
 function csvUrl(gid) {
   return `${PUB_BASE}?output=csv&gid=${gid}`;
@@ -266,6 +267,7 @@ function badgeClass(val) {
   if (v === 'media') return 'badge-media';
   if (v === 'baja') return 'badge-baja';
   if (v === 'abierto') return 'badge-abierto';
+  if (v === 'cerrado') return 'badge-cerrado';
   return '';
 }
 
@@ -285,6 +287,23 @@ function critColor(val) {
   return '#2d7a4f';
 }
 
+// "Martina Romero" -> "M. Romero" (matches abbreviated tester names used in Run/Bugs sheets)
+function abbrevName(fullName) {
+  if (!fullName) return '';
+  const parts = fullName.trim().split(/\s+/);
+  if (parts.length < 2) return fullName;
+  return `${parts[0][0]}. ${parts[parts.length - 1]}`;
+}
+
+// Sort RUN-IDs like "RUN-01", "RUN-02" numerically and return the latest
+function latestRunId(runIds) {
+  return [...runIds].sort((a, b) => {
+    const na = parseInt((a.match(/\d+/) || ['0'])[0]);
+    const nb = parseInt((b.match(/\d+/) || ['0'])[0]);
+    return na - nb;
+  }).pop();
+}
+
 async function loadAll() {
   const overlay = document.getElementById('loadingOverlay');
   const btn = document.getElementById('refreshBtn');
@@ -294,31 +313,18 @@ async function loadAll() {
   errBanner.classList.remove('visible');
 
   try {
-    const [summaryRaw, casesRaw, runRaw, bugsRaw] = await Promise.all([
-      parseCSV(csvUrl(GIDS.summary)),
+    const [casesRaw, runRaw, bugsRaw] = await Promise.all([
       parseCSV(csvUrl(GIDS.cases)),
       parseCSV(csvUrl(GIDS.run)),
       parseCSV(csvUrl(GIDS.bugs))
     ]);
-
-    // --- PARSE SUMMARY ---
-    // rows after header: Total ejecutados, Bugs registrados, % éxito, Total casos, Coverage
-    const sumMap = {};
-    for (let i = 1; i < summaryRaw.length; i++) {
-      if (summaryRaw[i][0]) sumMap[summaryRaw[i][0].trim()] = summaryRaw[i][1];
-    }
-    const totalCasos = parseInt(sumMap['Total de casos'] || sumMap['Total casos'] || 25) || 25;
-    const ejecutados = parseInt(sumMap['Total de casos ejecutados'] || sumMap['Ejecutados'] || 0) || 0;
-    const bugsCount = parseInt(sumMap['Bugs registrados'] || 0) || 0;
-    const coverageRaw = sumMap['Coverage'];
-    const coverage = isNaN(parseInt(coverageRaw)) ? 0 : parseInt(coverageRaw);
 
     // --- PARSE CASES ---
     // row 0 = title row, row 1 = headers: TC, NOMBRE, DESCRIPCIÓN, ...PRIORIDAD, QUIEN LO CREÓ, ESTADO
     let casesHeaders = [];
     let casesData = [];
     if (casesRaw.length > 1) {
-      casesHeaders = casesRaw[1].map(h => h.trim());
+      casesHeaders = casesRaw[1].map(h => (h || '').trim());
       for (let i = 2; i < casesRaw.length; i++) {
         const row = casesRaw[i];
         if (!row[0] || !row[0].startsWith('TC-')) continue;
@@ -327,77 +333,103 @@ async function loadAll() {
         casesData.push(obj);
       }
     }
+    const casesTitle = (casesRaw[0] && casesRaw[0][0]) ? casesRaw[0][0] : '';
 
     // --- PARSE RUN ---
+    // row 1 headers: RUN-ID, TC, NOMBRE, STATUS, RESULTADO OBTENIDO, PRIORIDAD, CRITICIDAD, Fecha del RUN, TESTER, Release
     let runHeaders = [];
     let runData = [];
     if (runRaw.length > 1) {
-      runHeaders = runRaw[1].map(h => h.trim());
+      runHeaders = runRaw[1].map(h => (h || '').trim());
       for (let i = 2; i < runRaw.length; i++) {
         const row = runRaw[i];
         if (!row[1] || !row[1].startsWith('TC-')) continue;
         const obj = {};
-        runHeaders.forEach((h, idx) => obj[h] = (row[idx] || '').trim());
+        runHeaders.forEach((h, idx) => obj[h] = (row[idx] !== undefined && row[idx] !== null) ? String(row[idx]).trim() : '');
         runData.push(obj);
       }
     }
-    const runTCs = new Set(runData.map(r => r['TC']));
+
+    // Latest result per TC (later RUN-IDs override earlier ones for the same TC)
+    const runByTC = {};
+    runData.forEach(r => { runByTC[r['TC']] = r; });
+    const runTCs = new Set(Object.keys(runByTC));
+    const allRunIds = new Set(runData.map(r => r['RUN-ID']).filter(Boolean));
+    const currentRun = latestRunId(allRunIds) || 'RUN-01';
 
     // --- PARSE BUGS ---
+    // row 1 headers: BUG-ID, RUN-ID, TC, AMBIENTE, DESCRIPCIÓN, STEPS TO REPRODUCE, RESULTADO OBTENIDO, RESULTADO ESPERADO, PRIORIDAD, CRITICIDAD, STATUS, TESTER, Release, Evidencia
     let bugsHeaders = [];
     let bugsData = [];
     if (bugsRaw.length > 1) {
-      bugsHeaders = bugsRaw[1].map(h => h.trim());
+      bugsHeaders = bugsRaw[1].map(h => (h || '').trim());
       for (let i = 2; i < bugsRaw.length; i++) {
         const row = bugsRaw[i];
         if (!row[0] || !row[0].startsWith('BUG-')) continue;
         const obj = {};
-        bugsHeaders.forEach((h, idx) => obj[h] = (row[idx] || '').trim());
+        bugsHeaders.forEach((h, idx) => obj[h] = (row[idx] !== undefined && row[idx] !== null) ? String(row[idx]).trim() : '');
         bugsData.push(obj);
       }
     }
 
     // --- DERIVED METRICS ---
-    const totalBugs = bugsData.length || bugsCount;
-    const coveragePct = totalCasos > 0 ? Math.round((runTCs.size / totalCasos) * 100) : 0;
+    const totalCasos = casesData.length || 1;
+    const totalBugs = bugsData.length;
+    const bugsAbiertos = bugsData.filter(b => (b['STATUS'] || '').toLowerCase() === 'abierto').length;
+    const bugsCerrados = bugsData.filter(b => (b['STATUS'] || '').toLowerCase() === 'cerrado').length;
+    const coveragePct = Math.round((runTCs.size / totalCasos) * 100);
 
-    // Priority counts
+    // Priority counts (full TC catalog)
     const prioCounts = { Alta: 0, Media: 0, Baja: 0 };
     casesData.forEach(tc => {
       const p = tc['PRIORIDAD'] || '';
       if (prioCounts[p] !== undefined) prioCounts[p]++;
     });
+
+    // Priority counts of TCs that have been run at least once
     const runPrioCounts = { Alta: 0, Media: 0, Baja: 0 };
-    runData.forEach(r => {
-      const tc = casesData.find(c => c['TC'] === r['TC']);
-      if (tc) { const p = tc['PRIORIDAD']; if (runPrioCounts[p] !== undefined) runPrioCounts[p]++; }
+    runTCs.forEach(tcId => {
+      const tc = casesData.find(c => c['TC'] === tcId);
+      const p = tc ? tc['PRIORIDAD'] : runByTC[tcId]['PRIORIDAD'];
+      if (runPrioCounts[p] !== undefined) runPrioCounts[p]++;
     });
 
-    // Tester stats
+    // Executions / success rate (based on latest status per TC)
+    const executedEntries = Object.values(runByTC).filter(r => r['STATUS'] && r['STATUS'] !== 'Not Run');
+    const ejecutados = executedEntries.length;
+    const passed = executedEntries.filter(r => r['STATUS'] === 'Pass' || r['STATUS'] === 'Passed').length;
+    const successPct = ejecutados > 0 ? Math.round((passed / ejecutados) * 100) : null;
+
+    // Tester stats (cases use full names, run/bugs use abbreviated "F. Last")
     const testerStats = {};
     casesData.forEach(tc => {
       const t = tc['QUIEN LO CREÓ'] || 'Desconocido';
-      if (!testerStats[t]) testerStats[t] = { created: 0, inRun: 0, bugs: 0 };
+      if (!testerStats[t]) testerStats[t] = { created: 0, inRun: 0, passed: 0, failed: 0, bugs: 0, abbrev: abbrevName(t) };
       testerStats[t].created++;
       if (runTCs.has(tc['TC'])) testerStats[t].inRun++;
     });
+    const abbrevToFull = {};
+    Object.keys(testerStats).forEach(name => abbrevToFull[testerStats[name].abbrev] = name);
+
+    runData.forEach(r => {
+      const full = abbrevToFull[r['TESTER']];
+      if (!full) return;
+      if (r['STATUS'] === 'Pass') testerStats[full].passed++;
+      if (r['STATUS'] === 'Fail') testerStats[full].failed++;
+    });
     bugsData.forEach(b => {
-      const t = b['TESTER'] || '';
-      if (testerStats[t]) testerStats[t].bugs++;
+      const full = abbrevToFull[b['TESTER']];
+      if (full) testerStats[full].bugs++;
     });
 
     // TC → bugs map
     const tcBugs = {};
     bugsData.forEach(b => {
       const tc = b['TC'];
-      if (!tc || tc === 'NaN') return;
+      if (!tc || tc === 'N/A' || tc === 'NaN') return;
       if (!tcBugs[tc]) tcBugs[tc] = [];
       tcBugs[tc].push(b['BUG-ID']);
     });
-
-    // Success rate
-    const passed = runData.filter(r => r['STATUS'] === 'Passed' || r['STATUS'] === 'Pass').length;
-    const successPct = ejecutados > 0 ? Math.round((passed / ejecutados) * 100) : null;
 
     // --- RENDER KPIs ---
     document.getElementById('kpiGrid').innerHTML = `
@@ -407,7 +439,7 @@ async function loadAll() {
         <div class="kpi-sub">testing cases</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-label">En RUN-01</div>
+        <div class="kpi-label">En ejecución</div>
         <div class="kpi-value" style="color:var(--blue)">${runTCs.size}</div>
         <div class="kpi-sub">de ${totalCasos} casos</div>
         <div class="kpi-accent-bar" style="width:${coveragePct}%;background:var(--blue)"></div>
@@ -421,7 +453,7 @@ async function loadAll() {
       <div class="kpi-card">
         <div class="kpi-label">Bugs</div>
         <div class="kpi-value" style="color:var(--red)">${totalBugs}</div>
-        <div class="kpi-sub">todos abiertos</div>
+        <div class="kpi-sub">${bugsAbiertos} abiertos · ${bugsCerrados} cerrados</div>
         <div class="kpi-accent-bar" style="width:${totalBugs>0?100:0}%;background:var(--red)"></div>
       </div>
       <div class="kpi-card">
@@ -433,12 +465,12 @@ async function loadAll() {
       <div class="kpi-card">
         <div class="kpi-label">Éxito</div>
         <div class="kpi-value" style="color:${successPct!==null?'var(--green)':'var(--text3)'}">${successPct!==null?successPct+'%':'—'}</div>
-        <div class="kpi-sub">${ejecutados>0?passed+' passed':'sin ejecuciones'}</div>
+        <div class="kpi-sub">${ejecutados>0?passed+' passed / '+(ejecutados-passed)+' failed':'sin ejecuciones'}</div>
       </div>
     `;
 
     // --- COVERAGE BARS ---
-    const totalInRun = runTCs.size || 1;
+    document.getElementById('coverageTitle').textContent = `Coverage por prioridad · ${currentRun}`;
     document.getElementById('coverageBars').innerHTML = ['Alta','Media','Baja'].map(p => {
       const n = runPrioCounts[p];
       const total = prioCounts[p];
@@ -487,18 +519,16 @@ async function loadAll() {
     });
 
     // --- BUG STATUS BAR ---
-    const abiertos = bugsData.filter(b => (b['STATUS']||'').toLowerCase() === 'abierto').length;
-    const cerrados = bugsData.filter(b => (b['STATUS']||'').toLowerCase() === 'cerrado').length;
     const total_b = bugsData.length || 1;
     document.getElementById('bugStatusBar').innerHTML = `
       <div style="display:flex;gap:12px;align-items:center;">
         <div style="flex:1;height:12px;border-radius:99px;overflow:hidden;background:var(--bg);display:flex;">
-          <div style="height:100%;width:${Math.round(abiertos/total_b*100)}%;background:var(--red)"></div>
-          <div style="height:100%;width:${Math.round(cerrados/total_b*100)}%;background:var(--green)"></div>
+          <div style="height:100%;width:${Math.round(bugsAbiertos/total_b*100)}%;background:var(--red)"></div>
+          <div style="height:100%;width:${Math.round(bugsCerrados/total_b*100)}%;background:var(--green)"></div>
         </div>
       </div>
       <div style="margin-top:6px;font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);">
-        ${abiertos} abiertos · ${cerrados} cerrados
+        ${bugsAbiertos} abiertos · ${bugsCerrados} cerrados
       </div>
     `;
 
@@ -510,26 +540,26 @@ async function loadAll() {
       : '<span style="color:var(--text3)">Sin TCs vinculados a bugs</span>';
 
     // --- BUGS TABLE ---
-    document.getElementById('bugsCount').textContent = `${totalBugs} ${totalBugs===1?'abierto':'abiertos'}`;
+    document.getElementById('bugsCount').textContent = `${totalBugs} total · ${bugsAbiertos} abiertos`;
     document.getElementById('bugsTableBody').innerHTML = bugsData.map(b => `
       <tr>
         <td><span class="bug-id">${b['BUG-ID']||'—'}</span></td>
+        <td><span class="bug-id">${b['RUN-ID']||'—'}</span></td>
         <td><span class="bug-id">${b['TC']&&b['TC']!=='NaN'?b['TC']:'—'}</span></td>
         <td class="bug-desc">${b['DESCRIPCIÓN']||b['DESCRIPTION']||'—'}</td>
         <td>${b['AMBIENTE']||'—'}</td>
         <td><span class="badge ${badgeClass(b['PRIORIDAD'])}">${b['PRIORIDAD']||'—'}</span></td>
         <td><span class="badge ${badgeClass(b['CRITICIDAD'])}">${b['CRITICIDAD']||'—'}</span></td>
         <td>${b['TESTER']||'—'}</td>
+        <td>${b['Release']||'—'}</td>
         <td><span class="badge ${badgeClass(b['STATUS']||'Abierto')}">${b['STATUS']||'Abierto'}</span></td>
       </tr>
     `).join('');
 
     // --- TC GRID ---
-    const avColors = ['av-a','av-b','av-c'];
-    const avClasses = {'av-a':'', 'av-b':'', 'av-c':''};
     document.getElementById('tcGrid').innerHTML = casesData.map(tc => {
       const inRun = runTCs.has(tc['TC']);
-      const runRow = runData.find(r => r['TC'] === tc['TC']);
+      const runRow = runByTC[tc['TC']];
       const status = runRow ? (runRow['STATUS']||'Not Run') : null;
       const bugs = tcBugs[tc['TC']];
       let dotClass = inRun ? 'status-pending' : 'status-norun';
@@ -556,16 +586,16 @@ async function loadAll() {
         <div class="avatar ${avList[i%3]}">${initials}</div>
         <div>
           <div class="tester-name">${name}</div>
-          <div class="tester-count">${s.created} TCs · ${s.inRun} en run · ${s.bugs} bugs</div>
+          <div class="tester-count">${s.created} TCs · ${s.passed} pass · ${s.failed} fail · ${s.bugs} bugs</div>
         </div>
       </div>`;
     }).join('');
 
     // --- HEADER ---
-    document.getElementById('headerSub').textContent = casesData[0]?.['NOMBRE'] ? 'Login / Contraseña / Acceso / Cierre de sesión' : 'Dashboard actualizado';
-    document.getElementById('runBadgeText').textContent = `RUN-01 · ${totalBugs} bugs · Coverage ${coveragePct}%`;
+    document.getElementById('headerSub').textContent = casesTitle || 'Dashboard actualizado';
+    document.getElementById('runBadgeText').textContent = `${currentRun} · ${totalBugs} bugs · Coverage ${coveragePct}%`;
     document.getElementById('lastUpdated').textContent = 'Última actualización: ' + new Date().toLocaleString('es-AR');
-    document.getElementById('footerRight').textContent = `RUN-01 · ${totalCasos} casos · ${totalBugs} bugs`;
+    document.getElementById('footerRight').textContent = `${currentRun} · ${totalCasos} casos · ${totalBugs} bugs`;
 
   } catch (err) {
     const errBanner = document.getElementById('errorBanner');
